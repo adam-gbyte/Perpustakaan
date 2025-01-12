@@ -5,11 +5,6 @@ const getAllUsers = async () => {
     return rows
 }
 
-const getUserById = async (id) => {
-    const [row] = await db.query("SELECT * FROM users WHERE id=?", id)
-    return row
-}
-
 const deleteUserById = async (id) => {
     const [result] = await db.query("DELETE FROM users WHERE id=?", [id]);
     return result.affectedRows;
@@ -17,6 +12,5 @@ const deleteUserById = async (id) => {
 
 module.exports = {
     getAllUsers,
-    getUserById,
     deleteUserById
 }

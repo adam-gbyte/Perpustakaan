@@ -1,4 +1,4 @@
-fetch('http://localhost:3000/api/users/2', {
+fetch('http://localhost:3000/api/books/2', {
     method: 'DELETE',
     headers: {
         "x-api-key": "123"

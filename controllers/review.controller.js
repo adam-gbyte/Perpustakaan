@@ -16,7 +16,7 @@ const getReviewById = async (req, res) => {
             genre: rows[0].genre,
             published_date: rows[0].published_date,
             reviews: rows
-                .filter(row => row.review_id !== null)
+                .filter(row => row.review_id)
                 .map(row => ({
                     id: row.review_id,
                     user_id: row.user_id,

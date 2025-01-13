@@ -1,6 +1,7 @@
 const loansController = require('../controllers/loans.controller')
 
 const auth = require('../middlewares/user-auth')
+const adminAuth = require('../middlewares/admin-auth')
 
 const express = require('express');
 const router = express.Router();
@@ -9,7 +10,7 @@ const router = express.Router();
 router.post('/loans', auth, loansController.postLoans)
 
 // GET api/loans
-router.get('/loans', auth, loansController.getAllLoans);
+router.get('/loans', adminAuth, loansController.getAllLoans);
 
 // PUT api/loans/:id/return
 router.put('/loans/:id/return', auth, loansController.updateReturnDate);

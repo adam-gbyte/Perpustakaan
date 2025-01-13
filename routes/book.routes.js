@@ -1,14 +1,13 @@
 const bookController = require('../controllers/book.controller');
 
 const auth = require('../middlewares/user-auth')
+const adminAuth = require('../middlewares/admin-auth')
 
 const express = require('express');
 const router = express.Router();
 
-const userAuth = require('../middlewares/user-auth')
-
 // POST api/books
-router.post('/books', auth, bookController.postBook);
+router.post('/books', adminAuth, bookController.postBook);
 
 // GET api/books?genre=genre dan GET api/books
 router.get('/books', auth, bookController.getBooks);
@@ -17,9 +16,9 @@ router.get('/books', auth, bookController.getBooks);
 router.get('/books/:id', auth, bookController.getBooksById);
 
 // PUT api/books/:id
-router.put('/books/:id', auth, bookController.updateBook);
+router.put('/books/:id', adminAuth, bookController.updateBook);
 
 // DELETE api/books/:id
-router.delete('/books/:id', auth, bookController.deleteBookById);
+router.delete('/books/:id', adminAuth, bookController.deleteBookById);
 
 module.exports = router;

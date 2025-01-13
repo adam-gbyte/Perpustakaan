@@ -1,20 +1,16 @@
-const validApiKey = '123'
+const jwt = require('jsonwebtoken')
 
-const userAuth = (req, res, next) => {
-    // const apiKey = '123'
-    const apiKey = req.headers['x-api-key']
+const auth = (req, res, next) => {
+    const token = req.header("Authorization")
 
-    if (!apiKey) {
-        res.status(400).json({ message: 'Access Denied' })
-        return
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorize' })
     }
 
-    if (apiKey != validApiKey) {
-        res.status(400).json({ message: 'Invalid API key' })
-        return
-    }
-
-    next()
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.json({ message: "Invalid token" })
+        next()
+    })
 }
 
-module.exports = userAuth
+module.exports = auth

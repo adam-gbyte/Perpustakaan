@@ -2,8 +2,7 @@ const userModel = require('../models/user');
 
 const getUserById = async (req, res) => {
     try {
-        const student =
-            await userModel.getUserById(req.params.id)
+        const student = await userModel.getUserById(req.params.id)
         if (student.length > 0) {
             res.status(200).json({ message: 'Sukses', student })
         }
@@ -23,10 +22,11 @@ const userRegistration = async (req, res) => {
     try {
         const add = await userModel.userRegistration(data)
         if (add) {
-            return res.status(200).json({ id: add.id, hash: add.pass })
+            return res.status(200).json({ data })
+            // return res.status(200).json({ id: add.id, hash: add.pass })
         }
-        return res.status(400).send({ msg: 'Registration Failed' })
 
+        return res.status(400).send({ msg: 'Registration Failed' })
     } catch (eror) {
         console.log(eror);
     }
@@ -38,11 +38,16 @@ const userLogin = async (req, res) => {
     try {
         const login = await userModel.userLogin(data)
         if (login) {
-            return res.status(200).json({ id: login.id, hash: login.pass })
+            console.log('Email dan Password', data);
+            console.log('Login sebagai', login.name);
+
+            return res.status(200).json({ login })
+            // return res.status(200).json({ id: login.id, hash: login.pass })
         }
         return res.status(400).send({ msg: 'Login Failed' })
 
     } catch (eror) {
+        console.log('eror');
         console.log(eror);
     }
 }

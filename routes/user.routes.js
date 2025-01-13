@@ -1,10 +1,12 @@
 const userController = require('../controllers/user.controller');
 
+const auth = require('../middlewares/user-auth')
+
 const express = require('express');
 const router = express.Router();
 
 // GET api/users/:id
-router.get('/users/:id', userController.getUserById);
+router.get('/users/:id', auth, userController.getUserById);
 
 // POST api/auth/register
 router.post('/auth/register', userController.userRegistration);

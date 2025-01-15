@@ -1,7 +1,5 @@
-
 const externalController = require('../controllers/external.controller');
 
-const adminAuth = require('../middlewares/admin-auth')
 const auth = require('../middlewares/user-auth')
 
 const express = require('express');

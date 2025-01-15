@@ -45,9 +45,9 @@ const postBook = async (req, res) => {
     try {
         const add = await bookModel.postBook(data)
         if (add) {
-            return res.status(200).json({ id: add.id })
+            return res.status(200).json({ message: 'Book add successfully' })
         }
-        return res.status(400).send({ msg: 'Registration Failed' })
+        return res.status(400).send({ msg: 'Add book Failed' })
 
     } catch (eror) {
         console.log(eror);

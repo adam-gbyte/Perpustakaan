@@ -34,7 +34,8 @@ const getLoansByIdUser = async (req, res) => {
                     book_id: row.book_id,
                     loan_date: row.loan_date,
                     return_date: row.return_date,
-                }))
+                })
+            )
         };
 
         return res.status(200).json({ message: 'Success', loan });
@@ -69,7 +70,7 @@ const postLoans = async (req, res) => {
     try {
         const add = await loansModel.postLoans(data)
         if (add) {
-            return res.status(200).json({ id: add.id })
+            return res.status(200).json({ message: 'Menambahkan peminjaman buku sukses' })
         }
         return res.status(400).send({ msg: 'Menambahkan peminjaman buku Failed' })
 

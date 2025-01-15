@@ -33,7 +33,50 @@ const getReviewById = async (req, res) => {
     }
 };
 
+// const updateComment = async (req, res) => {
+    
+//     const { id } = req.params;
+//     const { comment } = req.body;
+
+//     if (!comment) {
+//         return res.status(400).json({ message: 'Comment is required' });
+//     }
+
+//     try {
+//         // Ambil data review berdasarkan ID
+//         const review = await reviewModel.getReviewById(id);
+//         if (!review) {
+//             return res.status(404).json({ message: 'Comment not found' });
+//         }
+
+//         const isOwner = req.user.id === review.user_id; // User ID dari token cocok dengan user_id dari review
+//         console.log('isOwner', isOwner);
+        
+//         const isAdmin = req.user.role === "admin"; // Role admin
+
+//         console.log(req.user.role)
+
+//         if (!isOwner && !isAdmin) {
+//             return res.status(403).json({ message: 'Kamu bukan pemilik comment ini' });
+//         }
+
+//         // Update comment jika user diizinkan
+//         const result = await reviewModel.updateComment(id, comment);
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ message: 'Comment not found' });
+//         }
+
+//         res.status(200).json({ message: 'Comment updated successfully' });
+//     } catch (error) {
+//         console.log('error dari review model');
+        
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
 const updateComment = async (req, res) => {
+    console.log('dari review controller', req.params);
+    
     const { id } = req.params;
     const { comment } = req.body;
 
@@ -48,23 +91,58 @@ const updateComment = async (req, res) => {
         }
         res.status(200).json({ message: 'Comment updated successfully' });
     } catch (error) {
+        console.log({ message: error.message });
+        
         res.status(500).json({ message: error.message });
     }
 };
 
+// const deleteReviewById = async (req, res) => {
+//     const { id } = req.params
+//     try {
+//         const deletedCount = await reviewModel.deleteReviewById(id)
+//         if (deletedCount > 0) {
+//             res.status(200).json({ message: "Review deleted successfully" })
+//         } else {
+//             res.status(404).json({ message: "Review not found" })
+//         }
+//     } catch (error) {
+//         res.status(500).json({ message: error.message })
+//     }
+// }
+
 const deleteReviewById = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
+    const userId = req.user.id; // ID pengguna yang sedang login, diasumsikan ada di req.user
+    console.log('review ID', id, 'User ID', userId)
+
     try {
-        const deletedCount = await reviewModel.deleteReviewById(id)
+        // Dapatkan review berdasarkan ID
+        const review = await reviewModel.getReviewByIdReviews(id);
+        console.log('review ID', review.user_id)
+
+        if (!review) {
+            return res.status(404).json({ message: "Review not found" });
+        }
+
+        // Periksa apakah user adalah pemilik review
+        if (review.user_id !== userId) {
+            return res.status(403).json({ message: "You are not authorized to delete this review" });
+        }
+
+        // Hapus review jika pemiliknya cocok
+        const deletedCount = await reviewModel.deleteReviewById(id);
         if (deletedCount > 0) {
-            res.status(200).json({ message: "Review deleted successfully" })
+            res.status(200).json({ message: "Review deleted successfully" });
         } else {
-            res.status(404).json({ message: "Review not found" })
+            res.status(500).json({ message: "Failed to delete review" });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        console.log('cek 123');
+        
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 const postReview = async (req, res) => {
     const data = req.body
@@ -72,9 +150,9 @@ const postReview = async (req, res) => {
     try {
         const add = await reviewModel.postReview(data)
         if (add) {
-            return res.status(200).json({ id: add.id })
+            return res.status(200).json({ message: 'Menambahkan review buku berhasil' })
         }
-        return res.status(400).send({ msg: 'Menambahkan review buku Failed' })
+        return res.status(400).send({ message: 'Menambahkan review buku Failed' })
 
     } catch (eror) {
         console.log(eror);

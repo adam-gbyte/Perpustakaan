@@ -42,17 +42,17 @@ const postBook = async (data) => {
 const updateBookById = async (id, data) => {
     console.log('Data diterima:', data);
 
-    const { title, author, genre, published_date } = data;
+    const { title, author, genre } = data;
 
-    if (!title || !author || !genre || !published_date) {
-        console.log('Data tidak lengkap:', { title, author, genre, published_date });
+    if (!title || !author || !genre) {
+        console.log('Data tidak lengkap:', { title, author, genre });
         return ({ msg: 'Data tidak lengkap' });
     }
 
     try {
         const [result] = await db.query(
-            'UPDATE books SET title=?, author=?, genre=?, published_date=? WHERE id=?',
-            [title, author, genre, published_date, id]
+            'UPDATE books SET title=?, author=?, genre=? WHERE id=?',
+            [title, author, genre, id]
         );
         return ({ msg: 'Data berhasil diubah' });
     } catch (error) {

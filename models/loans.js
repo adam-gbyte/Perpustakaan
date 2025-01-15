@@ -47,17 +47,17 @@ const updateReturnDate = async (id, returnDate) => {
 const postLoans = async (data) => {
     console.log('Data diterima:', data);
 
-    const { user_id, book_id, loan_date, return_date } = data;
+    const { user_id, book_id } = data;
 
-    if (!user_id || !book_id || !loan_date) {
-        console.log('Data tidak lengkap:', { user_id, book_id, loan_date });
+    if (!user_id || !book_id ) {
+        console.log('Data tidak lengkap:', { user_id, book_id });
         return ({ msg: 'Data tidak lengkap' });
     }
 
     try {
         const [result] = await db.query(
-            'INSERT INTO loans (user_id, book_id, loan_date, return_date) VALUES (?,?,?,?)',
-            [user_id, book_id, loan_date, return_date]
+            'INSERT INTO loans (user_id, book_id) VALUES (?,?)',
+            [user_id, book_id]
         );
         return ({ Id: result.insertId });
     } catch (error) {
